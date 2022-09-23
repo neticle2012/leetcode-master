@@ -1,10 +1,8 @@
 <p align="center">
-  <a href="https://mp.weixin.qq.com/s/RsdcQ9umo09R6cfnwXZlrQ"><img src="https://img.shields.io/badge/PDF下载-代码随想录-blueviolet" alt=""></a>
-  <a href="https://mp.weixin.qq.com/s/b66DFkOp8OOxdZC_xLZxfw"><img src="https://img.shields.io/badge/刷题-微信群-green" alt=""></a>
-  <a href="https://space.bilibili.com/525438321"><img src="https://img.shields.io/badge/B站-代码随想录-orange" alt=""></a>
-  <a href="https://mp.weixin.qq.com/s/QVF6upVMSbgvZy8lHZS3CQ"><img src="https://img.shields.io/badge/知识星球-代码随想录-blue" alt=""></a>
-</p>
-<p align="center"><strong>欢迎大家<a href="https://mp.weixin.qq.com/s/tqCxrMEU-ajQumL1i8im9A">参与本项目</a>，贡献其他语言版本的代码，拥抱开源，让更多学习算法的小伙伴们收益！</strong></p>
+<a href="https://programmercarl.com/other/kstar.html" target="_blank">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210924105952.png" width="1000"/>
+</a>
+<p align="center"><strong><a href="https://mp.weixin.qq.com/s/tqCxrMEU-ajQumL1i8im9A">参与本项目</a>，贡献其他语言版本的代码，拥抱开源，让更多学习算法的小伙伴们收益！</strong></p>
 # 贪心算法：根据身高重建队列（续集）
 
 在讲解[贪心算法：根据身高重建队列](https://programmercarl.com/0406.根据身高重建队列.html)中，我们提到了使用vector（C++中的动态数组）来进行insert操作是费时的。
@@ -99,7 +97,7 @@ for (int i = 0; i < vec.size(); i++) {
 
 **同时也注意此时capicity和size的变化，关键的地方我都标红了**。
 
-而在[贪心算法：根据身高重建队列](https://programmercarl.com/0406.根据身高重建队列.html)中，我们使用vector来做insert的操作，此时大家可会发现，**虽然表面上复杂度是O(n^2)，但是其底层都不知道额外做了多少次全量拷贝了，所以算上vector的底层拷贝，整体时间复杂度可以认为是O(n^2 + t * n)级别的，t是底层拷贝的次数**。
+而在[贪心算法：根据身高重建队列](https://programmercarl.com/0406.根据身高重建队列.html)中，我们使用vector来做insert的操作，此时大家可会发现，**虽然表面上复杂度是O(n^2)，但是其底层都不知道额外做了多少次全量拷贝了，所以算上vector的底层拷贝，整体时间复杂度可以认为是O(n^2 + t × n)级别的，t是底层拷贝的次数**。
 
 那么是不是可以直接确定好vector的大小，不让它在动态扩容了，例如在[贪心算法：根据身高重建队列](https://programmercarl.com/0406.根据身高重建队列.html)中已经给出了有people.size这么多的人，可以定义好一个固定大小的vector，这样我们就可以控制vector，不让它底层动态扩容。
 
@@ -173,11 +171,16 @@ Python：
 
 Go：
 
+Go中slice的`append`操作和C++中vector的扩容机制基本相同。
+
+说是基本呢，其实是因为大家平时刷题和工作中遇到的数据不会特别大。
+
+具体来说，当当前slice的长度小于**1024**时，执行`append`操作，新slice的capacity会变成当前的2倍；而当slice长度大于等于**1024**时，slice的扩容变成了每次增加当前slice长度的**1/4**。
+
+在Go Slice的底层实现中，如果capacity不够时，会做一个reslice的操作，底层数组也会重新被复制到另一块内存区域中，所以`append`一个元素，不一定是O(1), 也可能是O(n)哦。
+
 
 
 
 -----------------------
-* 作者微信：[程序员Carl](https://mp.weixin.qq.com/s/b66DFkOp8OOxdZC_xLZxfw)
-* B站视频：[代码随想录](https://space.bilibili.com/525438321)
-* 知识星球：[代码随想录](https://mp.weixin.qq.com/s/QVF6upVMSbgvZy8lHZS3CQ)
-<div align="center"><img src=https://code-thinking.cdn.bcebos.com/pics/01二维码.jpg width=450> </img></div>
+<div align="center"><img src=https://code-thinking.cdn.bcebos.com/pics/01二维码一.jpg width=500> </img></div>

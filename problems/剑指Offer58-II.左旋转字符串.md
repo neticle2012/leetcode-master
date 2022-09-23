@@ -1,17 +1,15 @@
 <p align="center">
-  <a href="https://mp.weixin.qq.com/s/RsdcQ9umo09R6cfnwXZlrQ"><img src="https://img.shields.io/badge/PDF下载-代码随想录-blueviolet" alt=""></a>
-  <a href="https://mp.weixin.qq.com/s/b66DFkOp8OOxdZC_xLZxfw"><img src="https://img.shields.io/badge/刷题-微信群-green" alt=""></a>
-  <a href="https://space.bilibili.com/525438321"><img src="https://img.shields.io/badge/B站-代码随想录-orange" alt=""></a>
-  <a href="https://mp.weixin.qq.com/s/QVF6upVMSbgvZy8lHZS3CQ"><img src="https://img.shields.io/badge/知识星球-代码随想录-blue" alt=""></a>
-</p>
-<p align="center"><strong>欢迎大家<a href="https://mp.weixin.qq.com/s/tqCxrMEU-ajQumL1i8im9A">参与本项目</a>，贡献其他语言版本的代码，拥抱开源，让更多学习算法的小伙伴们收益！</strong></p>
+<a href="https://programmercarl.com/other/kstar.html" target="_blank">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210924105952.png" width="1000"/>
+</a>
+<p align="center"><strong><a href="https://mp.weixin.qq.com/s/tqCxrMEU-ajQumL1i8im9A">参与本项目</a>，贡献其他语言版本的代码，拥抱开源，让更多学习算法的小伙伴们收益！</strong></p>
 
 
 > 反转个字符串还有这么多用处？
 
 # 题目：剑指Offer58-II.左旋转字符串
 
-[力扣题目链接](https://leetcode-cn.com/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/)
+[力扣题目链接](https://leetcode.cn/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/)
 
 字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
 
@@ -200,17 +198,76 @@ func reverse(b []byte, left, right int){
 JavaScript：
 
 ```javascript
+var reverseLeftWords = function(s, n) {
+  const length = s.length;
+  let i = 0;
+  while (i < length - n) {
+    s = s[length - 1] + s;
+    i++;
+  }
+  return s.slice(0, length);
+};
+```
+
+版本二（在原字符串上操作）：
+
+```js
+/**
+ * @param {string} s
+ * @param {number} n
+ * @return {string}
+ */
 var reverseLeftWords = function (s, n) {
-    const reverse = (str, left, right) => {
-        let strArr = str.split("");
-        for (; left < right; left++, right--) {
-            [strArr[left], strArr[right]] = [strArr[right], strArr[left]];
+    /** Utils */
+    function reverseWords(strArr, start, end) {
+        let temp;
+        while (start < end) {
+            temp = strArr[start];
+            strArr[start] = strArr[end];
+            strArr[end] = temp;
+            start++;
+            end--;
         }
-        return strArr.join("");
     }
-    s = reverse(s, 0, n - 1);
-    s = reverse(s, n, s.length - 1);
-    return reverse(s, 0, s.length - 1);
+    /** Main code */
+    let strArr = s.split('');
+    let length = strArr.length;
+    reverseWords(strArr, 0, length - 1);
+    reverseWords(strArr, 0, length - n - 1);
+    reverseWords(strArr, length - n, length - 1);
+    return strArr.join('');
+};
+```
+
+TypeScript：
+
+```typescript
+function reverseLeftWords(s: string, n: number): string {
+    /** Utils */
+    function reverseWords(strArr: string[], start: number, end: number): void {
+        let temp: string;
+        while (start < end) {
+            temp = strArr[start];
+            strArr[start] = strArr[end];
+            strArr[end] = temp;
+            start++;
+            end--;
+        }
+    }
+    /** Main code */
+    let strArr: string[] = s.split('');
+    let length: number = strArr.length;
+    reverseWords(strArr, 0, length - 1);
+    reverseWords(strArr, 0, length - n - 1);
+    reverseWords(strArr, length - n, length - 1);
+    return strArr.join('');
+};
+```
+方法二:
+```typescript
+// 拼接两个字符串，截取符合要求的部分
+function reverseLeftWords(s: string, n: number): string {
+    return (s+s).slice(n,s.length+n);
 };
 ```
 
@@ -241,12 +298,82 @@ func reverseString(_ s: inout [Character], startIndex: Int, endIndex: Int)  {
 ```
 
 
+### PHP
 
+```php
+function reverseLeftWords($s, $n) {
+    $this->reverse($s,0,$n-1); //反转区间为前n的子串
+    $this->reverse($s,$n,strlen($s)-1); //反转区间为n到末尾的子串
+    $this->reverse($s,0,strlen($s)-1); //反转整个字符串
+    return $s;
+}
+
+// 按指定进行翻转 【array、string都可】
+function reverse(&$s, $start, $end) {
+    for ($i = $start, $j = $end; $i < $j; $i++, $j--) {
+        $tmp = $s[$i];
+        $s[$i] = $s[$j];
+        $s[$j] = $tmp;
+    }
+}
+```
+
+
+Scala:
+
+```scala
+object Solution {
+  def reverseLeftWords(s: String, n: Int): String = {
+    var str = s.toCharArray // 转换为Array
+    // abcdefg => ba cdefg 
+    reverseString(str, 0, n - 1)
+    // ba cdefg => ba gfedc
+    reverseString(str, n, str.length - 1)
+    // ba gfedc => cdefgab
+    reverseString(str, 0, str.length - 1)
+    // 最终返回，return关键字可以省略
+    new String(str)
+  }
+  // 翻转字符串
+  def reverseString(s: Array[Char], start: Int, end: Int): Unit = {
+    var (left, right) = (start, end)
+    while (left < right) {
+      var tmp = s(left)
+      s(left) = s(right)
+      s(right) = tmp
+      left += 1
+      right -= 1
+    }
+  }
+}
+```
+
+Rust:
+
+```Rust
+impl Solution {
+    pub fn reverse(s: &mut Vec<char>, mut begin: usize, mut end: usize){
+        while begin < end {
+            let temp = s[begin];
+            s[begin] = s[end];
+            s[end] = temp;
+            begin += 1;
+            end -= 1;
+        }
+    }
+    pub fn reverse_left_words(s: String, n: i32) -> String {
+        let len = s.len();
+        let mut s = s.chars().collect::<Vec<char>>();
+        let n = n as usize;
+        Self::reverse(&mut s, 0, n - 1);
+        Self::reverse(&mut s, n, len - 1);
+        Self::reverse(&mut s, 0, len - 1);
+        s.iter().collect::<String>()
+    }
+}
+```
 
 
 
 -----------------------
-* 作者微信：[程序员Carl](https://mp.weixin.qq.com/s/b66DFkOp8OOxdZC_xLZxfw)
-* B站视频：[代码随想录](https://space.bilibili.com/525438321)
-* 知识星球：[代码随想录](https://mp.weixin.qq.com/s/QVF6upVMSbgvZy8lHZS3CQ)
-<div align="center"><img src=https://code-thinking.cdn.bcebos.com/pics/01二维码.jpg width=450> </img></div>
+<div align="center"><img src=https://code-thinking.cdn.bcebos.com/pics/01二维码一.jpg width=500> </img></div>
